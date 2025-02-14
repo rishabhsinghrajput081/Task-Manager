@@ -3,47 +3,41 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
+      - main  # Trigger the pipeline on pushes to the main branch
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      # Step 1: Checkout code
+      # Step 1: Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # Step 2: Set up Node.js for backend
-      - name: Set up Node.js (Backend)
-        uses: actions/setup-node@v3
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: 20  # Use the latest LTS version of Node.js
+          cache: 'npm'      # Cache npm dependencies for faster builds
 
-      # Step 3: Install backend dependencies
-      - name: Install backend dependencies
-        run: |
-          cd backend
-          npm install
-
-      # Step 4: Set up Node.js for frontend
-      - name: Set up Node.js (Frontend)
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-
-      # Step 5: Install frontend dependencies
+      # Step 3: Install frontend dependencies
       - name: Install frontend dependencies
-        run: |
-          cd frontend
-          npm install
+        run: npm install
+        working-directory: ./frontend  # Change to the frontend directory
 
-      # Step 6: Build frontend
+      # Step 4: Build the frontend
       - name: Build frontend
-        run: |
-          cd frontend
-          npm run build
+        run: npm run build
+        working-directory: ./frontend  # Change to the frontend directory
 
-      # Optional: Add deployment steps here (e.g., deploy to Heroku, Netlify)
+      # Step 5: Install backend dependencies
+      - name: Install backend dependencies
+        run: npm install
+        working-directory: ./backend  # Change to the backend directory
+
+      # Step 6: Deploy the application
+      # Add deployment steps here based on your deployment target
+      # Example: Deploy to GitHub Pages, Vercel, Netlify, or a custom server
+      - name: Deploy application
+        run: echo "Deployment steps go here"
