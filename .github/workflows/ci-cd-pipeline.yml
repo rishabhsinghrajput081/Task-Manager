@@ -1,0 +1,49 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js for backend
+      - name: Set up Node.js (Backend)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Step 3: Install backend dependencies
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          npm install
+
+      # Step 4: Set up Node.js for frontend
+      - name: Set up Node.js (Frontend)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Step 5: Install frontend dependencies
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install
+
+      # Step 6: Build frontend
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm run build
+
+      # Optional: Add deployment steps here (e.g., deploy to Heroku, Netlify)
