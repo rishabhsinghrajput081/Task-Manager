@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main
+      - main  # Trigger the pipeline on pushes to the main branch
 
 jobs:
   build-and-deploy:
@@ -18,24 +18,34 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'npm'
+          node-version: 20  # Use Node.js 20
+          cache: 'npm'       # Cache npm dependencies for faster builds
 
-      # Step 3: Install frontend dependencies
+      # Step 3: Generate package-lock.json if missing (frontend)
+      - name: Generate package-lock.json if missing (frontend)
+        run: npm install --package-lock-only
+        working-directory: ./frontend  # Specify the frontend directory
+
+      # Step 4: Install frontend dependencies
       - name: Install frontend dependencies
         run: npm install
         working-directory: ./frontend  # Specify the frontend directory
 
-      # Step 4: Build the frontend
+      # Step 5: Build the frontend
       - name: Build frontend
         run: npm run build
         working-directory: ./frontend  # Specify the frontend directory
 
-      # Step 5: Install backend dependencies
+      # Step 6: Generate package-lock.json if missing (backend)
+      - name: Generate package-lock.json if missing (backend)
+        run: npm install --package-lock-only
+        working-directory: ./backend  # Specify the backend directory
+
+      # Step 7: Install backend dependencies
       - name: Install backend dependencies
         run: npm install
         working-directory: ./backend  # Specify the backend directory
 
-      # Step 6: Deploy the application
+      # Step 8: Deploy the application
       - name: Deploy application
         run: echo "Deployment steps go here"
