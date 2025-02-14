@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main  # Trigger the pipeline on pushes to the main branch
+      - main
 
 jobs:
   build-and-deploy:
@@ -18,26 +18,24 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20  # Use the latest LTS version of Node.js
-          cache: 'npm'      # Cache npm dependencies for faster builds
+          node-version: 20
+          cache: 'npm'
 
       # Step 3: Install frontend dependencies
       - name: Install frontend dependencies
         run: npm install
-        working-directory: ./frontend  # Change to the frontend directory
+        working-directory: ./frontend  # Specify the frontend directory
 
       # Step 4: Build the frontend
       - name: Build frontend
         run: npm run build
-        working-directory: ./frontend  # Change to the frontend directory
+        working-directory: ./frontend  # Specify the frontend directory
 
       # Step 5: Install backend dependencies
       - name: Install backend dependencies
         run: npm install
-        working-directory: ./backend  # Change to the backend directory
+        working-directory: ./backend  # Specify the backend directory
 
       # Step 6: Deploy the application
-      # Add deployment steps here based on your deployment target
-      # Example: Deploy to GitHub Pages, Vercel, Netlify, or a custom server
       - name: Deploy application
         run: echo "Deployment steps go here"
